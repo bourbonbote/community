@@ -63,7 +63,7 @@ public class MyBatisTest {
     for(DiscussPost discussPost : list){
       System.out.println(discussPost);
     }
-
+    //gitTest
     int i = discussPostMapper.selectDiscussPostRows(149);
     System.out.println(i);
   }
