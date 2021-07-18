@@ -1,8 +1,10 @@
 package com.bobo.community;
 
 import com.bobo.community.Entity.DiscussPost;
+import com.bobo.community.Entity.LoginTicket;
 import com.bobo.community.Entity.User;
 import com.bobo.community.Mapper.DiscussPostMapper;
+import com.bobo.community.Mapper.LoginTicketMapper;
 import com.bobo.community.Mapper.UserMapper;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +22,9 @@ public class MyBatisTest {
 
   @Autowired
   DiscussPostMapper discussPostMapper;
+
+  @Autowired
+  LoginTicketMapper loginTicketMapper;
 
   @Test
   public void selectTests(){
@@ -59,12 +64,42 @@ public class MyBatisTest {
 
   @Test
   public void DiscussPostTest(){
+    DiscussPost discussPost = new DiscussPost();
+    discussPost.setStatus(0);
+    discussPost.setCreateTime(new Date());
+    discussPost.setContent("Text");
+    discussPost.setUserId(166);
+    discussPost.setCommentCount(0);
+    discussPost.setTitle("Test");
+    discussPostMapper.insertDiscussPost(discussPost);
     List<DiscussPost> list = discussPostMapper.selectDiscussPosts(149,0,10);
-    for(DiscussPost discussPost : list){
-      System.out.println(discussPost);
+    for(DiscussPost discussPost1 : list){
+      System.out.println(discussPost1);
     }
     //gittest
     int i = discussPostMapper.selectDiscussPostRows(149);
     System.out.println(i);
+  }
+
+  @Test
+  public void LoginTicketTest(){
+    LoginTicket loginTicket = new LoginTicket();
+    loginTicket.setId(1);
+    loginTicket.setStatus(0);
+    loginTicket.setUserId(2);
+    loginTicket.setTicket("123");
+    loginTicket.setExpired(new Date(System.currentTimeMillis() + 1000 * 60 * 10) );
+    loginTicketMapper.insertLoginTicket(loginTicket);
+    LoginTicket lt = loginTicketMapper.selectLoginTicket("123");
+    System.out.println(lt);
+    loginTicketMapper.updateLoginTicketStatus(lt.getTicket(),1);
+  }
+
+  @Test
+  public void HomeTest(){
+    List<DiscussPost> list = discussPostMapper.selectDiscussPosts(0, 50, 10);
+    for(DiscussPost discussPost :list){
+      System.out.println(list);
+    }
   }
 }
