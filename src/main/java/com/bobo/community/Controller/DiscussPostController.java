@@ -6,6 +6,7 @@ import com.bobo.community.Entity.Page;
 import com.bobo.community.Entity.User;
 import com.bobo.community.Service.CommentService;
 import com.bobo.community.Service.DiscussPostService;
+import com.bobo.community.Service.LikeService;
 import com.bobo.community.Service.UserService;
 import com.bobo.community.Util.CommunityConstant;
 import com.bobo.community.Util.CommunityUtil;
@@ -41,6 +42,9 @@ public class DiscussPostController implements CommunityConstant {
   @Autowired
   CommentService commentService;
 
+  @Autowired
+  LikeService likeService;
+
   @RequestMapping(path = "/add",method = RequestMethod.POST)
   @ResponseBody
   public String addDiscussPost(String title, String content){
@@ -66,10 +70,20 @@ public class DiscussPostController implements CommunityConstant {
   public String discussPostDetail(@PathVariable int discussPostId, Model model, Page page){
     //帖子
     DiscussPost post = discussPostService.findDiscussPostById(discussPostId);
+    model.addAttribute("post",post);
+
     //作者
     User user = userService.findUserById(post.getUserId());
-    model.addAttribute("post",post);
     model.addAttribute("user",user);
+
+    //点赞数量
+    long likeCount = likeService.findLikeCount(ENTITY_TYPE_POST, discussPostId);
+    model.addAttribute("likeCount",likeCount);
+
+    //点赞状态
+    int likeStatus=hostHolder.getUser()==null?0:
+        likeService.findLikeStatus(ENTITY_TYPE_POST,discussPostId,hostHolder.getUser().getId());
+    model.addAttribute("likeStatus",likeStatus);
 
     //设置评论分页信息
     page.setRows(post.getCommentCount());
@@ -79,7 +93,7 @@ public class DiscussPostController implements CommunityConstant {
     //回复：回复评论的评论
     //评论列表
     List<Comment> commentList = commentService
-        .findCommentsByEntity(COMMENT_ENTITY_TYPE_POST, discussPostId, page.getOffset(),
+        .findCommentsByEntity(ENTITY_TYPE_POST, discussPostId, page.getOffset(),
             page.getLimit());
     //待加入Model的容器commentVoList
     List<Map<String,Object>> commentVoList = new ArrayList<>();
@@ -89,10 +103,17 @@ public class DiscussPostController implements CommunityConstant {
         //将帖子的评论放入容器commentVo中
         commentVo.put("comment",comment);
         //将帖子评论的作者放入容器comementVo中
-        commentVo.put("user",user);
+        commentVo.put("user",userService.findUserById(comment.getUserId()));
+        //点赞数量
+        likeCount = likeService.findLikeCount(ENTITY_TYPE_COMMENT, comment.getId());
+        commentVo.put("likeCount",likeCount);
+        //点赞状态
+        likeStatus=hostHolder.getUser()==null?0:
+            likeService.findLikeStatus(ENTITY_TYPE_COMMENT,comment.getId(),hostHolder.getUser().getId());
+        commentVo.put("likeStatus",likeStatus);
         //获取回复列表
         List<Comment> replyList = commentService
-            .findCommentsByEntity(COMMENT_ENTITY_TYPE_COMMENT, comment.getId(), 0,
+            .findCommentsByEntity(ENTITY_TYPE_COMMENT, comment.getId(), 0,
                 Integer.MAX_VALUE);
         //待加入commentVoList的容器commentVoList
         List<Map<String,Object>> replyVoList = new ArrayList<>();
@@ -104,12 +125,19 @@ public class DiscussPostController implements CommunityConstant {
             User target =
                 reply.getTargetId() == 0 ? null : userService.findUserById(reply.getTargetId());
             replyVo.put("target",target);
+            //点赞数量
+            likeCount = likeService.findLikeCount(ENTITY_TYPE_COMMENT, reply.getId());
+            replyVo.put("likeCount",likeCount);
+            //点赞状态
+            likeStatus=hostHolder.getUser()==null?0:
+                likeService.findLikeStatus(ENTITY_TYPE_COMMENT,reply.getId(),hostHolder.getUser().getId());
+            replyVo.put("likeStatus",likeStatus);
             replyVoList.add(replyVo);
           }
 
         }
         commentVo.put("replys",replyVoList);
-        int replyCount = commentService.findCountByEntity(COMMENT_ENTITY_TYPE_COMMENT, comment.getId());
+        int replyCount = commentService.findCountByEntity(ENTITY_TYPE_COMMENT, comment.getId());
         commentVo.put("replyCount",replyCount);
         commentVoList.add(commentVo);
       }

@@ -30,10 +30,15 @@ public interface CommunityConstant {
   /**
    * 设置实体类的类型为帖子
    */
-  int COMMENT_ENTITY_TYPE_POST = 1;
+  int ENTITY_TYPE_POST = 1;
 
   /**
    * 设置实体类的类型为评论
    */
-  int COMMENT_ENTITY_TYPE_COMMENT = 2;
+  int ENTITY_TYPE_COMMENT = 2;
+
+  /**
+   * 设置实体类的类型为用户
+   */
+  int ENTITY_TYPE_USER = 3;
 }

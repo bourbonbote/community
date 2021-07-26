@@ -2,10 +2,13 @@ package com.bobo.community;
 
 import com.bobo.community.Entity.DiscussPost;
 import com.bobo.community.Entity.LoginTicket;
+import com.bobo.community.Entity.Message;
 import com.bobo.community.Entity.User;
 import com.bobo.community.Mapper.DiscussPostMapper;
 import com.bobo.community.Mapper.LoginTicketMapper;
+import com.bobo.community.Mapper.MessageMapper;
 import com.bobo.community.Mapper.UserMapper;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.junit.Test;
@@ -25,6 +28,9 @@ public class MyBatisTest {
 
   @Autowired
   LoginTicketMapper loginTicketMapper;
+
+  @Autowired
+  MessageMapper messageMapper;
 
   @Test
   public void selectTests(){
@@ -101,5 +107,30 @@ public class MyBatisTest {
     for(DiscussPost discussPost :list){
       System.out.println(list);
     }
+  }
+
+  @Test
+  public void messageTest(){
+    List<Message> messages = messageMapper.selectConversation(111, 0, 20);
+    for(Message message :messages){
+      System.out.println(message);
+    }
+    int i = messageMapper.selectCoversationsCount(111);
+    System.out.println(i);
+
+    messages = messageMapper.selectLetters("111_112", 0, 10);
+    for(Message message :messages){
+      System.out.println(message);
+    }
+    i = messageMapper.selectLettersCount("111_112");
+    System.out.println(i);
+    i = messageMapper.selectUnreadCount(111,null);
+    System.out.println(i);
+  }
+  @Test
+  public void MessageTest(){
+    List<Integer> ids = new ArrayList<>();
+    ids.add(1);
+    messageMapper.updateStatus(ids,0);
   }
 }

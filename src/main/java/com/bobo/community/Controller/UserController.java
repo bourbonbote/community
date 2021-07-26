@@ -2,7 +2,10 @@ package com.bobo.community.Controller;
 
 import com.bobo.community.Anonotation.LoginRequired;
 import com.bobo.community.Entity.User;
+import com.bobo.community.Service.FollowService;
+import com.bobo.community.Service.LikeService;
 import com.bobo.community.Service.UserService;
+import com.bobo.community.Util.CommunityConstant;
 import com.bobo.community.Util.CommunityUtil;
 import com.bobo.community.Util.HostHolder;
 import java.io.File;
@@ -23,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping(path = "/user")
-public class UserController {
+public class UserController implements CommunityConstant {
 
   @Value("${community.path.upload}")
   private String upload;
@@ -39,6 +42,12 @@ public class UserController {
 
   @Autowired
   HostHolder hostHolder;
+
+  @Autowired
+  LikeService likeService;
+
+  @Autowired
+  FollowService followService;
 
   public static Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -115,5 +124,36 @@ public class UserController {
     } catch (IOException e) {
       logger.error("头像读取失败"+ e.getMessage());
     }
+  }
+
+  /**
+   * 个人主页
+   * @param authorId
+   * @param model
+   * @return
+   */
+  @RequestMapping(path = "/profile/{authorId}",method = RequestMethod.GET)
+  public String getProfile(@PathVariable("authorId")int authorId,Model model){
+    User user = userService.findUserById(authorId);
+    if( user == null){
+      throw new IllegalArgumentException("user/profile的user不能为空");
+    }
+    model.addAttribute("user",user);
+    //点赞数
+    int likeCount = likeService.findAuthorLikeCount(authorId);
+    model.addAttribute("likeCount",likeCount);
+    //关注数
+    long followeeCount = followService.findFolloweeCount(user.getId(), ENTITY_TYPE_USER);
+    model.addAttribute("followeeCount",followeeCount);
+    //粉丝数
+    long followerCount = followService.findFollowerCount(ENTITY_TYPE_USER, authorId);
+    model.addAttribute("followerCount",followerCount);
+    //是否已关注
+    boolean hasFollowed = false;
+    if(hostHolder.getUser() != null){
+      hasFollowed = followService.hasFollowed(hostHolder.getUser().getId(), ENTITY_TYPE_USER, authorId);
+    }
+    model.addAttribute("hasFollowed",hasFollowed);
+    return "/site/profile";
   }
 }
