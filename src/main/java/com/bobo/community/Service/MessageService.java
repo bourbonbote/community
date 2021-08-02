@@ -38,4 +38,20 @@ public class MessageService {
   public int addMessage(Message message){
     return messageMapper.insertMessage(message);
   }
+
+  public Message findNoticeLatest(int userId,String conversationId){
+    return messageMapper.selectNoticeLatest(userId,conversationId);
+  }
+
+  public int findNoticeCount(int userId,String conversationId){
+    return messageMapper.selectNoticeCount(userId,conversationId);
+  }
+
+  public int findNoticeUnreadCount(int userId,String conversationId){
+    return messageMapper.selectNoticeUnreadCount(userId,conversationId);
+  }
+
+  public List<Message> findNoticeDetail(int userId,String conversationId,int offset,int limit){
+    return messageMapper.selectNoticeDetail(userId,conversationId,offset,limit);
+  }
 }

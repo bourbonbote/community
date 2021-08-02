@@ -41,4 +41,26 @@ public interface CommunityConstant {
    * 设置实体类的类型为用户
    */
   int ENTITY_TYPE_USER = 3;
+
+  /**
+   * 设置消息队列的类型为评论
+   */
+  String TOPIC_COMMENT = "comment";
+
+
+  /**
+   * 设置消息队列的类型为点赞
+   */
+  String TOPIC_LIKE = "like";
+
+
+  /**
+   * 设置消息队列的类型为关注
+   */
+  String  TOPIC_FOLLOW = "follow";
+
+  /**
+   * 设置默认发消息的用户userId为  1
+   */
+  int SYSTEM_ID = 1;
 }

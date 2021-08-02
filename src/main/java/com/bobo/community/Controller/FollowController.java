@@ -1,7 +1,9 @@
 package com.bobo.community.Controller;
 
+import com.bobo.community.Entity.Event;
 import com.bobo.community.Entity.Page;
 import com.bobo.community.Entity.User;
+import com.bobo.community.Event.EventProducer;
 import com.bobo.community.Service.FollowService;
 import com.bobo.community.Service.UserService;
 import com.bobo.community.Util.CommunityConstant;
@@ -30,6 +32,8 @@ public class FollowController implements CommunityConstant {
   @Autowired
   UserService userService;
 
+  @Autowired
+  EventProducer eventProducer;
   /**
    * 实现关注的功能
    * @param entityType
@@ -41,6 +45,13 @@ public class FollowController implements CommunityConstant {
   public String follow(int entityType,int entityId){
     User user = hostHolder.getUser();
     followService.follow(entityType,entityId,user.getId());
+    Event event = new Event();
+    event.setUserId(hostHolder.getUser().getId())
+        .setTopic(TOPIC_FOLLOW)
+        .setEntityType(entityType)
+        .setEntityId(entityId)
+        .setAuthorId(entityId);
+    eventProducer.fireEvent(event);
     return CommunityUtil.jsonToString(0,"已关注");
   }
 

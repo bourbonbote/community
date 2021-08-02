@@ -36,8 +36,7 @@ public class DiscussPostController implements CommunityConstant {
   @Autowired
   HostHolder hostHolder;
 
-  @Autowired
-  CommunityUtil communityUtil;
+
 
   @Autowired
   CommentService commentService;
@@ -50,7 +49,7 @@ public class DiscussPostController implements CommunityConstant {
   public String addDiscussPost(String title, String content){
     User user = hostHolder.getUser();
     if( user == null){
-      return communityUtil.jsonToString(403,"请登录之后访问");
+      return CommunityUtil.jsonToString(403,"请登录之后访问");
     }
     DiscussPost discussPost = new DiscussPost();
     discussPost.setTitle(title);
@@ -63,7 +62,7 @@ public class DiscussPostController implements CommunityConstant {
     discussPost.setCommentCount(0);
     discussPostService.addDiscussPost(discussPost);
 
-    return communityUtil.jsonToString(0,"发布成功");
+    return CommunityUtil.jsonToString(0,"发布成功");
   }
 
   @RequestMapping(path = "/detail/{discussPostId}",method = RequestMethod.GET)
