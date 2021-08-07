@@ -1,5 +1,7 @@
 package com.bobo.community.Util;
 
+import java.util.Date;
+
 public class RedisKeyUtil {
   private static final String SPLIT = ":";
   private static final String PREFIX_LIKE_ENTITY = "like:entity";
@@ -9,6 +11,9 @@ public class RedisKeyUtil {
   private static final String PREFIX_KAPTCHA = "kaptcha";
   private static final String PREFIX_TICKET = "ticket";
   private static final String PREFIX_USER = "user";
+  private static final String PREFIX_UV = "uv";
+  private static final String PREFIX_DAU = "dau";
+  private static final String PREFIX_POST = "post";
 
 
   //获取某个实体（帖子、评论）的赞的key值
@@ -53,5 +58,30 @@ public class RedisKeyUtil {
   //在redis中存入User
   public static String getUser(int userId){
     return PREFIX_USER + SPLIT + userId;
+  }
+
+  //在redis中存入UV
+  public static String getUVKey(String date){
+    return PREFIX_UV + SPLIT + date;
+  }
+
+  //重载在redis中存入UV——区间内查询key
+  public static String getUVKey(String startDate,String endDate){
+    return PREFIX_UV +SPLIT + startDate +SPLIT + endDate;
+  }
+
+  //在redis中存入DAU
+  public static String getDAUKey(String date){
+    return PREFIX_DAU + SPLIT + date;
+  }
+
+  //重载在redis中存入DAU——区间内查询key
+  public static String getDAUKey(String startDate,String endDate){
+    return PREFIX_DAU +SPLIT + startDate +SPLIT + endDate;
+  }
+
+  //存放分数发生变化的post
+  public static String getPostScoreKey(){
+    return PREFIX_POST +SPLIT + "score";
   }
 }

@@ -144,4 +144,26 @@ public class DiscussPostController implements CommunityConstant {
     model.addAttribute("comments",commentVoList);
     return "/site/discuss-detail";
   }
+
+  //置顶
+  @RequestMapping(path = "/top",method = RequestMethod.POST)
+  @ResponseBody
+  public String top(int postId){
+    discussPostService.updateType(postId,1);
+    return CommunityUtil.jsonToString(0);
+  }
+  //加精
+  @RequestMapping(path = "/wonderful",method = RequestMethod.POST)
+  @ResponseBody
+  public String wonderful(int postId){
+    discussPostService.updateStatus(postId,1);
+    return CommunityUtil.jsonToString(0);
+  }
+  //删除
+  @RequestMapping(path = "/delete",method = RequestMethod.POST)
+  @ResponseBody
+  public String delete(int postId){
+    discussPostService.updateStatus(postId,2);
+    return CommunityUtil.jsonToString(0);
+  }
 }

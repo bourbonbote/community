@@ -63,4 +63,19 @@ public interface CommunityConstant {
    * 设置默认发消息的用户userId为  1
    */
   int SYSTEM_ID = 1;
+
+  /**
+   * 设置登录账号的权限为普通用户
+   */
+  String AUTHORITY_USER = "user";
+
+  /**
+   * 设置登录账号的权限为管理用户
+   */
+  String AUTHORITY_ADMIN = "admin";
+
+  /**
+   * 设置登录账号的权限为版主用户
+   */
+  String AUTHORITY_MODERATOR = "moderator";
 }
