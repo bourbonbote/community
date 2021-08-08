@@ -10,8 +10,10 @@ import com.bobo.community.Service.CommentService;
 import com.bobo.community.Service.DiscussPostService;
 import com.bobo.community.Util.CommunityConstant;
 import com.bobo.community.Util.HostHolder;
+import com.bobo.community.Util.RedisKeyUtil;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +34,9 @@ public class CommentController implements CommunityConstant {
   @Autowired
   DiscussPostService discussPostService;
 
+  @Autowired
+  RedisTemplate redisTemplate;
+
   @RequestMapping(path = "/add/{discussPostId}", method = RequestMethod.POST)
   public String addComment(@PathVariable("discussPostId")int discussPostId, Comment comment){
     comment.setCreateTime(new Date());
@@ -50,6 +55,11 @@ public class CommentController implements CommunityConstant {
     if(comment.getEntityType() == ENTITY_TYPE_POST){
       DiscussPost discussPost = discussPostService.findDiscussPostById(discussPostId);
       event.setAuthorId(discussPost.getUserId());
+
+      //将发生变化的post存入Redis中
+      String postScoreKey = RedisKeyUtil.getPostScoreKey();
+      redisTemplate.opsForSet().add(postScoreKey,discussPostId);
+
     } else if (comment.getEntityType() == ENTITY_TYPE_COMMENT){
       Comment target = commentService.findCommentById(comment.getEntityId());
       event.setAuthorId(target.getUserId());

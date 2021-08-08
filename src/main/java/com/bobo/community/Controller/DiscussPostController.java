@@ -11,12 +11,14 @@ import com.bobo.community.Service.UserService;
 import com.bobo.community.Util.CommunityConstant;
 import com.bobo.community.Util.CommunityUtil;
 import com.bobo.community.Util.HostHolder;
+import com.bobo.community.Util.RedisKeyUtil;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +38,8 @@ public class DiscussPostController implements CommunityConstant {
   @Autowired
   HostHolder hostHolder;
 
+  @Autowired
+  RedisTemplate redisTemplate;
 
 
   @Autowired
@@ -61,6 +65,10 @@ public class DiscussPostController implements CommunityConstant {
     discussPost.setType(0);
     discussPost.setCommentCount(0);
     discussPostService.addDiscussPost(discussPost);
+
+    //将发生变化的post存入Redis中
+    String postScoreKey = RedisKeyUtil.getPostScoreKey();
+    redisTemplate.opsForSet().add(postScoreKey,discussPost.getId());
 
     return CommunityUtil.jsonToString(0,"发布成功");
   }
@@ -157,6 +165,11 @@ public class DiscussPostController implements CommunityConstant {
   @ResponseBody
   public String wonderful(int postId){
     discussPostService.updateStatus(postId,1);
+
+    //将发生变化的post存入Redis中
+    String postScoreKey = RedisKeyUtil.getPostScoreKey();
+    redisTemplate.opsForSet().add(postScoreKey,postId);
+
     return CommunityUtil.jsonToString(0);
   }
   //删除

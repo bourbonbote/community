@@ -7,9 +7,11 @@ import com.bobo.community.Service.LikeService;
 import com.bobo.community.Util.CommunityConstant;
 import com.bobo.community.Util.CommunityUtil;
 import com.bobo.community.Util.HostHolder;
+import com.bobo.community.Util.RedisKeyUtil;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +28,9 @@ public class LikeController implements CommunityConstant {
 
   @Autowired
   EventProducer eventProducer;
+
+  @Autowired
+  RedisTemplate redisTemplate;
 
   @RequestMapping(path = "/likeAction",method = RequestMethod.POST)
   @ResponseBody
@@ -53,6 +58,13 @@ public class LikeController implements CommunityConstant {
           .setAuthorId(authorId)
           .setData("postId",discussPostId);
       eventProducer.fireEvent(event);
+
+      //如果评论的是帖子
+      if(entityType == ENTITY_TYPE_POST){
+        //将发生变化的post存入Redis中
+        String postScoreKey = RedisKeyUtil.getPostScoreKey();
+        redisTemplate.opsForSet().add(postScoreKey,discussPostId);
+      }
     }
     //返回json
     return CommunityUtil.jsonToString(0,null,map);

@@ -78,7 +78,7 @@ public class MyBatisTest {
     discussPost.setCommentCount(0);
     discussPost.setTitle("Test");
     discussPostMapper.insertDiscussPost(discussPost);
-    List<DiscussPost> list = discussPostMapper.selectDiscussPosts(149,0,10);
+    List<DiscussPost> list = discussPostMapper.selectDiscussPosts(149,0,10,0);
     for(DiscussPost discussPost1 : list){
       System.out.println(discussPost1);
     }
@@ -103,7 +103,7 @@ public class MyBatisTest {
 
   @Test
   public void HomeTest(){
-    List<DiscussPost> list = discussPostMapper.selectDiscussPosts(0, 50, 10);
+    List<DiscussPost> list = discussPostMapper.selectDiscussPosts(0, 50, 10,0);
     for(DiscussPost discussPost :list){
       System.out.println(list);
     }

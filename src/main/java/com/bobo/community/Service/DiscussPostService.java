@@ -17,8 +17,8 @@ public class DiscussPostService {
   @Autowired
   DiscussPostMapper discussPostMapper;
 
-  public List<DiscussPost> findDiscussPosts(int userId, int offset, int limit){
-    return discussPostMapper.selectDiscussPosts(userId,offset,limit);
+  public List<DiscussPost> findDiscussPosts(int userId, int offset, int limit,int mode){
+    return discussPostMapper.selectDiscussPosts(userId,offset,limit,mode);
   }
 
   public int findDiscussPostRows(int userId){
@@ -56,4 +56,7 @@ public class DiscussPostService {
   }
 
 
+  public void updateScore(int postId, double score) {
+    discussPostMapper.updateScore(postId,score);
+  }
 }

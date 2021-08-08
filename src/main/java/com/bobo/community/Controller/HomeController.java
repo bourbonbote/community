@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -32,10 +33,11 @@ public class HomeController implements CommunityConstant {
   LikeService likeService;
 
   @RequestMapping(path = "/index",method = RequestMethod.GET)
-  public String findAllDiscussPost(Model model, Page page){
-    page.setPath("/index");
+  public String findAllDiscussPost(Model model, Page page,
+      @RequestParam(name = "orderMode", defaultValue = "0") int orderMode){
+    page.setPath("/index?orederMode=" + orderMode);
     page.setRows(discussPostService.findDiscussPostRows(0));
-    List<DiscussPost> list = discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
+    List<DiscussPost> list = discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit(),orderMode);
     List<Map<String,Object>> discussPosts = new ArrayList<>();
     if( list != null) {
       for(DiscussPost discussPost : list) {
@@ -49,6 +51,7 @@ public class HomeController implements CommunityConstant {
       }
     }
     model.addAttribute("discussPosts",discussPosts);
+    model.addAttribute("orderMode",orderMode);
     return "/index";
   }
   @RequestMapping(path = "/error", method = RequestMethod.GET)
