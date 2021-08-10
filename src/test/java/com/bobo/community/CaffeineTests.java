@@ -20,6 +20,8 @@ public class CaffeineTests {
     @Autowired
     private DiscussPostService postService;
 
+
+
     @Test
     public void initDataForTest() {
         for (int i = 0; i < 300000; i++) {
@@ -35,10 +37,12 @@ public class CaffeineTests {
 
     @Test
     public void testCache() {
+
         System.out.println(postService.findDiscussPosts(0, 0, 10, 1));
         System.out.println(postService.findDiscussPosts(0, 0, 10, 1));
         System.out.println(postService.findDiscussPosts(0, 0, 10, 1));
         System.out.println(postService.findDiscussPosts(0, 0, 10, 0));
+        System.out.println("test");
     }
 
 }
