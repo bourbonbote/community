@@ -35,7 +35,7 @@ public class PostScoreRefreshJob implements CommunityConstant , Job {
 
   static {
     try {
-      era = new SimpleDateFormat("yyyy-MM-dd hh:MM:ss").parse("2014-08-01 00:00:00");
+      era = new SimpleDateFormat("yyyy-MM-dd hh:MM:ss").parse("2021-08-07 00:00:00");
     } catch (ParseException e) {
       throw new RuntimeException("PostScoreRefreshJob初始化失败");
     }
