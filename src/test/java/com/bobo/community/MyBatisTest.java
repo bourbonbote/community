@@ -1,3 +1,4 @@
+/*
 package com.bobo.community;
 
 import com.bobo.community.Entity.DiscussPost;
@@ -134,3 +135,4 @@ public class MyBatisTest {
     messageMapper.updateStatus(ids,0);
   }
 }
+*/
