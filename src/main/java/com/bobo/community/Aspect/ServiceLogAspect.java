@@ -26,7 +26,7 @@ public class ServiceLogAspect {
 
   @Before("pointCut()")
   public void before(JoinPoint joinPoint){
-    //用户[1.2.3.4],在[xxx],访问了[com.nowcoder.community.service.xxx()].
+    //用户[1.2.3.4],在[xxx],访问了[com.bobo.community.service.xxx()].
     ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
     if(attributes == null){
       return;

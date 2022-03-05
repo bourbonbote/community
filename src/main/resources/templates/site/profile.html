@@ -3,10 +3,9 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
 	<link rel="stylesheet" th:href="@{/css/global.css}" />
-	<title>牛客网-个人主页</title>
+	<title>个人主页</title>
 </head>
 <body>
 	<div class="nk-container">
@@ -21,7 +20,7 @@
 				<div class="position-relative">
 					<ul class="nav nav-tabs">
 						<li class="nav-item">
-							<a class="nav-link active" href="profile.html">个人信息</a>
+							<a class="nav-link active" th:href="@{/profile/user.id}">个人信息</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="my-post.html">我的帖子</a>
@@ -36,7 +35,7 @@
 					<img th:src="${user.headerUrl}" class="align-self-start mr-4 rounded-circle" alt="用户头像" style="width:50px;">
 					<div class="media-body">
 						<h5 class="mt-0 text-warning">
-							<span th:utext="${user.username}">nowcoder</span>
+							<span th:utext="${user.username}">bobo</span>
 							<input type="hidden" id="entityId" th:value="${user.id}">
 							<button type="button" th:class="|btn ${hasFollowed?'btn-secondary':'btn-info'} btn-sm float-right mr-5 follow-btn|"
 											th:if="${loginUser!=null&&loginUser.id!=user.id}" th:text="${hasFollowed?'已关注':'关注TA'}">关注TA</button>
@@ -56,7 +55,6 @@
 
 		<!-- 尾部 -->
 		<footer class="bg-dark" th:replace="index::footer">
-		</footer>
 	</div>
 
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
