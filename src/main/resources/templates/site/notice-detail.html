@@ -3,11 +3,10 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
 	<link rel="stylesheet" th:href="@{/css/global.css}" />
 	<link rel="stylesheet" th:href="@{/css/letter.css}" />
-	<title>牛客网-通知详情</title>
+	<title>通知详情</title>
 </head>
 <body>
 	<div class="nk-container">
@@ -26,7 +25,7 @@
 						<button type="button" class="btn btn-secondary btn-sm" onclick="back()">返回</button>
 					</div>
 				</div>
-				
+
 				<!-- 通知列表 -->
 				<ul class="list-unstyled mt-4" th:each="map:${noticeVoList}">
 					<li class="media pb-3 pt-3 mb-2" >
@@ -42,7 +41,7 @@
 <!--							评论-->
 							<div class="toast-body" th:if="${topic.equals('comment')}">
 								<span>用户
-									<i th:utext="${map.user.username}">nowcoder</i> 评论了你的
+									<i th:utext="${map.user.username}">bobo</i> 评论了你的
 									<b th:text="${map.entityType==1?'帖子':'评论'}">帖子</b>,
 									<a class="text-primary" th:href="@{|/discuss/detail/${map.postId}|}">点击查看</a> !
 								</span>
@@ -50,7 +49,7 @@
 <!--							点赞-->
 							<div class="toast-body" th:if="${topic.equals('like')}">
 								<span>用户
-									<i th:utext="${map.user.username}">nowcoder</i> 点赞了你的
+									<i th:utext="${map.user.username}">bobo</i> 点赞了你的
 									<b th:text="${map.entityType==1?'帖子':'评论'}">帖子</b>,
 									<a class="text-primary" th:href="@{|/discuss/detail/${map.postId}|}">点击查看</a> !
 								</span>
@@ -58,7 +57,7 @@
 <!--							关注-->
 							<div class="toast-body" th:if="${topic.equals('follow')}">
 								<span>用户
-									<i th:utext="${map.user.username}">nowcoder</i> 关注了你，
+									<i th:utext="${map.user.username}">bobo</i> 关注了你，
 									<a class="text-primary" th:href="@{|/user/profile/${map.user.id}|}">点击查看</a> !
 								</span>
 							</div>

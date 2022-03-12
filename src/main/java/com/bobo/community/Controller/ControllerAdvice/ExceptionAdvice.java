@@ -25,10 +25,12 @@ public class ExceptionAdvice {
       logger.error("服务器发生异常："+element.toString());
     }
     String xRequestedWith = request.getHeader("x-requested-with");
+    //异步请求
     if ("XMLHttpRequest".equals(xRequestedWith)) {
       response.setContentType("application/plain;charset=utf-8");
       PrintWriter writer = response.getWriter();
       writer.write(CommunityUtil.jsonToString(1, "服务器异常!"));
+      //非异步
     } else {
       response.sendRedirect(request.getContextPath() + "/error");
     }
